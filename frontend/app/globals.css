@@ -3,8 +3,28 @@
 @tailwind utilities;
 
 :root {
+  /* ── Base ─────────────────────────────── */
   --background: #ffffff;
   --foreground: #0f172a;
+
+  /* ── Surface tokens ───────────────────── */
+  --bg-page:        #f9fafb;   /* gray-50  — page background */
+  --bg-card:        #ffffff;   /* white    — card/panel fill */
+  --bg-subtle:      #f9fafb;   /* gray-50  — inset/secondary surfaces */
+
+  /* ── Border tokens ────────────────────── */
+  --border-default: #e5e7eb;   /* gray-200 — standard borders */
+  --border-strong:  #d1d5db;   /* gray-300 — inputs, dividers */
+
+  /* ── Text tokens ──────────────────────── */
+  --text-primary:   #111827;   /* gray-900 — headings */
+  --text-body:      #1f2937;   /* gray-800 — body copy */
+  --text-muted:     #6b7280;   /* gray-500 — labels, meta */
+  --text-faint:     #9ca3af;   /* gray-400 — timestamps, hints */
+
+  /* ── Brand ────────────────────────────── */
+  --brand:          #1e3a5f;   /* navy     — primary accent */
+  --brand-link:     #2563eb;   /* blue-600 — links */
 }
 
 body {

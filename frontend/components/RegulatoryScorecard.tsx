@@ -72,14 +72,14 @@ function ExplainButton({ title }: { title: string }) {
     <div className="mt-2">
       <button
         onClick={explain}
-        className="text-[10px] text-slate-500 hover:text-blue-600 border border-slate-300 hover:border-blue-400 px-2 py-0.5 rounded transition-colors"
+        className="text-[10px] text-gray-500 hover:text-blue-600 border border-gray-300 hover:border-blue-400 px-2 py-0.5 rounded transition-colors"
       >
         {open ? 'Hide' : 'Explain significance ◆'}
       </button>
       {open && (
-        <div className="mt-2 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 leading-relaxed">
+        <div className="mt-2 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 leading-relaxed">
           {loading && !text && (
-            <span className="animate-pulse text-slate-400">Asking Claude...</span>
+            <span className="animate-pulse text-gray-400">Asking Claude...</span>
           )}
           {text && <span>{text}</span>}
           {loading && text && <span className="animate-pulse ml-1 text-blue-500">▌</span>}
@@ -116,8 +116,8 @@ function CrossRefs({ report }: { report: string }) {
   );
   if (!relevant.length) return null;
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 space-y-1">
-      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-medium mb-2">Federal Standards Referenced</p>
+    <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 space-y-1">
+      <p className="text-[10px] text-gray-500 uppercase tracking-wider font-medium mb-2">Federal Standards Referenced</p>
       {relevant.map(r => (
         <a
           key={r.url}
@@ -179,7 +179,7 @@ export default function RegulatoryScorecard({ report, rawData }: Props) {
   });
 
   const explainButton = useCallback((title: string) => {
-    if (title.length < 8) return null; // skip very short headings
+    if (title.length < 8) return null;
     return <ExplainButton title={title} />;
   }, []);
 
@@ -191,27 +191,27 @@ export default function RegulatoryScorecard({ report, rawData }: Props) {
         {total > 0 && (
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {counts.exceeded > 0 && (
-              <span className="px-2 py-1 rounded-full bg-blue-900/60 text-blue-200 border border-blue-700">
+              <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 border border-green-300">
                 ✅ {counts.exceeded} Exceeded
               </span>
             )}
             {counts.met > 0 && (
-              <span className="px-2 py-1 rounded-full bg-emerald-900/60 text-emerald-200 border border-emerald-700">
+              <span className="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300">
                 ✓ {counts.met} Met
               </span>
             )}
             {counts.inProgress > 0 && (
-              <span className="px-2 py-1 rounded-full bg-amber-900/60 text-amber-200 border border-amber-700">
+              <span className="px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-300">
                 ⚠ {counts.inProgress} In Progress
               </span>
             )}
             {counts.missed > 0 && (
-              <span className="px-2 py-1 rounded-full bg-red-900/60 text-red-200 border border-red-700">
+              <span className="px-2 py-1 rounded-full bg-red-100 text-red-700 border border-red-300">
                 ❌ {counts.missed} Missed
               </span>
             )}
             {counts.pending > 0 && (
-              <span className="px-2 py-1 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600">
+              <span className="px-2 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-300">
                 ⏳ {counts.pending} Pending
               </span>
             )}
@@ -223,13 +223,13 @@ export default function RegulatoryScorecard({ report, rawData }: Props) {
             href="https://sandiego.granicus.com/search/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-blue-400 hover:text-blue-300 underline underline-offset-2"
+            className="text-xs text-blue-600 hover:text-blue-800 underline underline-offset-2"
           >
             Search Council Archive ↗
           </a>
           <button
             onClick={() => copyToClipboard(report)}
-            className="text-xs border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 px-3 py-1.5 rounded-lg transition-colors"
+            className="text-xs border border-gray-300 text-gray-500 hover:text-gray-800 hover:border-gray-400 px-3 py-1.5 rounded-lg transition-colors"
           >
             Copy for campaign use
           </button>
@@ -237,7 +237,7 @@ export default function RegulatoryScorecard({ report, rawData }: Props) {
       </div>
 
       {/* Full regulatory report — light card with explain buttons */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
         <StyledReport content={report} theme="light" explainButton={explainButton} />
       </div>
 
@@ -245,8 +245,8 @@ export default function RegulatoryScorecard({ report, rawData }: Props) {
       <CrossRefs report={report} />
 
       {/* Source disclosures */}
-      <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-        <p className="text-xs text-slate-500 uppercase tracking-wider font-medium mb-2">Data Attribution</p>
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-2">Data Attribution</p>
         <SourceDisclosure items={enrichedSources} label="Regulatory & Compliance Sources" />
       </div>
     </div>

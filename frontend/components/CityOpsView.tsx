@@ -154,7 +154,7 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
       />
 
       {/* Full ops briefing — light card */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
         <StyledReport content={report} theme="light" />
       </div>
 
@@ -166,7 +166,23 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
           rel="noopener noreferrer"
           className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
         >
-          SD Mayor Press Releases ↗
+          Search SD press releases →
+        </a>
+        <a
+          href="https://www.sandiegocounty.gov/deh/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
+        >
+          SD County DEH advisories →
+        </a>
+        <a
+          href="https://www.kpbs.org/environment"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
+        >
+          KPBS environmental coverage →
         </a>
         <a
           href="https://www.sandiego.gov/city-clerk/officialdocs"
@@ -174,7 +190,7 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
           rel="noopener noreferrer"
           className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
         >
-          SD City Official Documents ↗
+          SD City Official Documents →
         </a>
       </div>
     </div>

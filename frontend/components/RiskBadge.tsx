@@ -5,12 +5,12 @@ interface Props {
 }
 
 const colorMap: Record<string, string> = {
-  critical: 'text-red-200 border-red-500 bg-red-900/80',
-  red:      'text-red-400 border-red-800 bg-red-950/50',
-  orange:   'text-orange-400 border-orange-800 bg-orange-950/50',
-  amber:    'text-amber-400 border-amber-800 bg-amber-950/50',
-  yellow:   'text-yellow-400 border-yellow-800 bg-yellow-950/50',
-  green:    'text-emerald-400 border-emerald-800 bg-emerald-950/50',
+  critical: 'text-red-700 border-red-300 bg-red-100',
+  red:      'text-red-700 border-red-300 bg-red-100',
+  orange:   'text-orange-700 border-orange-300 bg-orange-100',
+  amber:    'text-amber-700 border-amber-300 bg-amber-100',
+  yellow:   'text-yellow-700 border-yellow-300 bg-yellow-100',
+  green:    'text-emerald-700 border-emerald-300 bg-emerald-100',
 };
 
 export default function RiskBadge({ score, tier, color }: Props) {

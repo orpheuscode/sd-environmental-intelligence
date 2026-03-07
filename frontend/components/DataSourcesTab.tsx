@@ -12,7 +12,10 @@ interface SourceDef {
   category: string;
   description: string;
   feeds: TabBadge[];
+  /** Landing page / info page shown as card title link */
   portalUrl: string;
+  /** Direct database or search URL for the "View Database →" button */
+  dbUrl: string;
   updateFrequency: string;
   /** dot-path into rawData to find this source's data, e.g. "drinking_water.bacteria" */
   rawDataPath?: string;
@@ -211,9 +214,9 @@ const CATEGORIES = [
 ];
 
 const TAB_COLORS: Record<TabBadge, string> = {
-  resident:   'bg-blue-900/50 text-blue-300 border border-blue-800',
-  city:       'bg-amber-900/50 text-amber-300 border border-amber-800',
-  regulatory: 'bg-purple-900/50 text-purple-300 border border-purple-800',
+  resident:   'bg-blue-100 text-blue-700 border border-blue-300',
+  city:       'bg-amber-100 text-amber-700 border border-amber-300',
+  regulatory: 'bg-purple-100 text-purple-700 border border-purple-300',
 };
 
 const TAB_LABELS: Record<TabBadge, string> = {
@@ -252,11 +255,11 @@ function findLatestDate(rows: any[], dateField: string): string | null {
 }
 
 function FreshnessChip({ date }: { date: string | null }) {
-  if (!date) return <span className="text-slate-600 text-xs">unknown</span>;
+  if (!date) return <span className="text-gray-500 text-xs">unknown</span>;
   try {
     const days = (Date.now() - new Date(date).getTime()) / 86400000;
     if (isNaN(days)) return null;
-    const color = days < 30 ? 'text-emerald-400' : days < 365 ? 'text-amber-400' : 'text-red-400';
+    const color = days < 30 ? 'text-emerald-600' : days < 365 ? 'text-amber-600' : 'text-red-600';
     const dot   = days < 30 ? 'bg-emerald-500' : days < 365 ? 'bg-amber-500' : 'bg-red-500';
     const label =
       days < 1 ? 'today'
@@ -296,7 +299,6 @@ function SourceCard({ src, rawData }: CardProps) {
     ? findLatestDate(rows, src.dateField)
     : null;
 
-  // Build a small preview table (last 3 rows, first 4 columns)
   const previewRows = rows.slice(-3);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const previewCols = previewRows.length > 0 ? Object.keys(previewRows[0] as Record<string, any>).slice(0, 4) : [];
@@ -304,21 +306,21 @@ function SourceCard({ src, rawData }: CardProps) {
   const isLive = rowCount > 0 && !hasError;
 
   return (
-    <div className={`border rounded-xl p-4 space-y-3 ${isLive ? 'border-slate-700 bg-slate-800/30' : hasError ? 'border-red-900/40 bg-red-950/10' : 'border-slate-800 bg-slate-900/30'}`}>
+    <div className={`border rounded-xl p-4 space-y-3 ${isLive ? 'border-gray-200 bg-white' : hasError ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2">
-          <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${isLive ? 'bg-emerald-500' : hasError ? 'bg-red-500' : 'bg-slate-600'}`} />
+          <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${isLive ? 'bg-emerald-500' : hasError ? 'bg-red-500' : 'bg-gray-300'}`} />
           <div>
             <a
               href={src.portalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-slate-200 hover:text-blue-400 transition-colors leading-tight"
+              className="text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors leading-tight"
             >
               {src.name} ↗
             </a>
-            <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{src.description}</p>
+            <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{src.description}</p>
           </div>
         </div>
       </div>
@@ -330,22 +332,22 @@ function SourceCard({ src, rawData }: CardProps) {
             {TAB_LABELS[f]}
           </span>
         ))}
-        <span className="text-xs text-slate-600">·</span>
-        <span className="text-xs text-slate-600">Updates: {src.updateFrequency}</span>
+        <span className="text-xs text-gray-400">·</span>
+        <span className="text-xs text-gray-500">Updates: {src.updateFrequency}</span>
         {latestDate && (
           <>
-            <span className="text-xs text-slate-600">·</span>
+            <span className="text-xs text-gray-400">·</span>
             <FreshnessChip date={latestDate} />
           </>
         )}
         {rowCount > 0 && (
           <>
-            <span className="text-xs text-slate-600">·</span>
-            <span className="text-xs text-slate-600">{rowCount} rows fetched</span>
+            <span className="text-xs text-gray-400">·</span>
+            <span className="text-xs text-gray-500">{rowCount} rows fetched</span>
           </>
         )}
         {hasError && (
-          <span className="text-xs text-red-400">Error: {String(sourceData.error).slice(0, 60)}</span>
+          <span className="text-xs text-red-600">Error: {String(sourceData.error).slice(0, 60)}</span>
         )}
       </div>
 
@@ -354,7 +356,7 @@ function SourceCard({ src, rawData }: CardProps) {
         <div>
           <button
             onClick={() => setExpanded(e => !e)}
-            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-400 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
           >
             <span className={`text-[9px] transition-transform duration-150 inline-block ${expanded ? 'rotate-90' : ''}`}>▶</span>
             View raw data
@@ -363,7 +365,7 @@ function SourceCard({ src, rawData }: CardProps) {
           {expanded && (
             <div className="mt-2 overflow-x-auto">
               {hasError ? (
-                <pre className="text-xs text-red-400 bg-red-950/30 rounded p-2 font-mono">
+                <pre className="text-xs text-red-600 bg-red-50 rounded p-2 font-mono">
                   {JSON.stringify(sourceData, null, 2).slice(0, 400)}
                 </pre>
               ) : previewCols.length > 0 ? (
@@ -373,7 +375,7 @@ function SourceCard({ src, rawData }: CardProps) {
                       {previewCols.map(col => (
                         <th
                           key={col}
-                          className="text-left text-slate-500 font-mono font-normal border-b border-slate-800 pb-1 pr-4 whitespace-nowrap"
+                          className="text-left text-gray-500 font-mono font-normal border-b border-gray-200 pb-1 pr-4 whitespace-nowrap"
                         >
                           {col}
                         </th>
@@ -386,7 +388,7 @@ function SourceCard({ src, rawData }: CardProps) {
                         {previewCols.map(col => (
                           <td
                             key={col}
-                            className="text-slate-400 font-mono pr-4 py-0.5 whitespace-nowrap max-w-[140px] overflow-hidden text-ellipsis"
+                            className="text-gray-600 font-mono pr-4 py-0.5 whitespace-nowrap max-w-[140px] overflow-hidden text-ellipsis"
                           >
                             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                             {String((row as Record<string, any>)[col] ?? '')}
@@ -397,7 +399,7 @@ function SourceCard({ src, rawData }: CardProps) {
                   </tbody>
                 </table>
               ) : (
-                <pre className="text-xs text-slate-500 bg-slate-900 rounded p-2 font-mono overflow-x-auto max-h-32">
+                <pre className="text-xs text-gray-600 bg-gray-50 rounded p-2 font-mono overflow-x-auto max-h-32">
                   {JSON.stringify(sourceData, null, 2).slice(0, 500)}
                 </pre>
               )}
@@ -408,7 +410,7 @@ function SourceCard({ src, rawData }: CardProps) {
 
       {/* Not yet fetched */}
       {!rawData && (
-        <p className="text-xs text-slate-700 italic">Run an analysis to see live data from this source.</p>
+        <p className="text-xs text-gray-400 italic">Run an analysis to see live data from this source.</p>
       )}
     </div>
   );
@@ -440,23 +442,23 @@ export default function DataSourcesTab({ rawData, lastFetchedAt }: Props) {
   return (
     <div className="space-y-6">
       {/* Aggregate stats bar */}
-      <div className="bg-slate-800/30 border border-slate-700 rounded-xl px-5 py-4">
+      <div className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4">
         <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-          <span className="text-slate-300">
-            <span className="text-white font-semibold">{totalSources}</span> data sources catalogued
+          <span className="text-gray-700">
+            <span className="text-gray-900 font-semibold">{totalSources}</span> data sources catalogued
           </span>
           {rawData && (
-            <span className="text-slate-300">
-              <span className={`font-semibold ${liveCount > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>{liveCount}</span> returned live data
+            <span className="text-gray-700">
+              <span className={`font-semibold ${liveCount > 0 ? 'text-emerald-600' : 'text-gray-400'}`}>{liveCount}</span> returned live data
             </span>
           )}
           {lastFetchedAt && (
-            <span className="text-slate-500">
-              Last refresh: <span className="text-slate-400 font-mono text-xs">{new Date(lastFetchedAt).toLocaleString()}</span>
+            <span className="text-gray-500">
+              Last refresh: <span className="text-gray-600 font-mono text-xs">{new Date(lastFetchedAt).toLocaleString()}</span>
             </span>
           )}
           {!rawData && (
-            <span className="text-slate-600 text-sm">Run an analysis above to see live data from each source.</span>
+            <span className="text-gray-400 text-sm">Run an analysis above to see live data from each source.</span>
           )}
         </div>
       </div>
@@ -467,8 +469,8 @@ export default function DataSourcesTab({ rawData, lastFetchedAt }: Props) {
           onClick={() => setActiveCategory(null)}
           className={`px-3 py-1 rounded-full text-xs border transition-colors ${
             activeCategory === null
-              ? 'bg-slate-700 border-slate-600 text-white'
-              : 'border-slate-700 text-slate-500 hover:text-slate-300 hover:border-slate-600'
+              ? 'bg-[#1e3a5f] border-[#1e3a5f] text-white'
+              : 'border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400'
           }`}
         >
           All
@@ -479,8 +481,8 @@ export default function DataSourcesTab({ rawData, lastFetchedAt }: Props) {
             onClick={() => setActiveCategory(c => c === cat ? null : cat)}
             className={`px-3 py-1 rounded-full text-xs border transition-colors ${
               activeCategory === cat
-                ? 'bg-slate-700 border-slate-600 text-white'
-                : 'border-slate-700 text-slate-500 hover:text-slate-300 hover:border-slate-600'
+                ? 'bg-[#1e3a5f] border-[#1e3a5f] text-white'
+                : 'border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400'
             }`}
           >
             {cat}
@@ -494,7 +496,7 @@ export default function DataSourcesTab({ rawData, lastFetchedAt }: Props) {
         if (!sources.length) return null;
         return (
           <div key={cat} className="space-y-3">
-            <h3 className="text-xs uppercase tracking-wider text-slate-500 font-medium border-b border-slate-800 pb-2">
+            <h3 className="text-xs uppercase tracking-wider text-gray-500 font-medium border-b border-gray-200 pb-2">
               {cat}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

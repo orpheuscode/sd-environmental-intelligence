@@ -111,7 +111,15 @@ async def explain_regulation(req: ExplainRequest):
     Stream a plain-language explanation of an environmental regulation or topic.
     Uses Claude Haiku for speed. Returns text/plain stream.
     """
-    _client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not api_key:
+        print("[explain] ERROR: ANTHROPIC_API_KEY is not set or empty in environment")
+        return StreamingResponse(
+            iter(["[API key not configured — set ANTHROPIC_API_KEY in .env]"]),
+            media_type="text/plain; charset=utf-8",
+        )
+
+    _client = anthropic.Anthropic(api_key=api_key)
     prompt = (
         f"You are a clear, accessible environmental policy communicator.\n\n"
         f"Explain in 2–3 sentences why this San Diego environmental regulation or "
@@ -122,13 +130,23 @@ async def explain_regulation(req: ExplainRequest):
     )
 
     def generate():
-        with _client.messages.stream(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=300,
-            messages=[{"role": "user", "content": prompt}],
-        ) as stream:
-            for text in stream.text_stream:
-                yield text
+        try:
+            with _client.messages.stream(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=300,
+                messages=[{"role": "user", "content": prompt}],
+            ) as stream:
+                for text in stream.text_stream:
+                    yield text
+        except anthropic.AuthenticationError as e:
+            print(f"[explain] AuthenticationError: {e}")
+            yield "[Authentication failed — check ANTHROPIC_API_KEY value in .env]"
+        except anthropic.APIConnectionError as e:
+            print(f"[explain] APIConnectionError: {e}")
+            yield "[Could not connect to Anthropic API — check network]"
+        except Exception as e:
+            print(f"[explain] Unexpected error: {type(e).__name__}: {e}")
+            yield f"[Explanation unavailable: {type(e).__name__}]"
 
     return StreamingResponse(generate(), media_type="text/plain; charset=utf-8")
 

@@ -115,10 +115,6 @@ export default function Home() {
     return r?.raw_data ?? null;
   })();
 
-  const scrollToResults = () => {
-    document.getElementById('report-output')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
 
