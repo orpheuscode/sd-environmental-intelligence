@@ -56,6 +56,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('resident');
   const [loading, setLoading] = useState(false);
   const [progressStep, setProgressStep] = useState(0);
+  const [streamText, setStreamText] = useState('');
   const [results, setResults] = useState<Partial<Record<Exclude<Tab, 'sources'>, PipelineResult>>>({});
   const [error, setError] = useState<string | null>(null);
   const [lastFailedTab, setLastFailedTab] = useState<Exclude<Tab, 'sources'> | null>(null);
@@ -65,14 +66,37 @@ export default function Home() {
     const addr = (addressOverride ?? address).trim();
     if (!addr) return;
 
+    const STREAM_MESSAGES = [
+      'reading geocoded coordinates...',
+      'cross-referencing air quality stations...',
+      'scanning bacteria monitoring records...',
+      'computing contamination risk vectors...',
+      'synthesizing environmental data...',
+      'generating health assessment...',
+      'compiling recommendations...',
+    ];
+
     setLoading(true);
     setError(null);
     setLastFailedTab(null);
     setProgressStep(0);
+    setStreamText('');
     setActiveTab(tab);
 
+    let streamIdx = 0;
+    let streamInterval: ReturnType<typeof setInterval> | null = null;
+
     const interval = setInterval(() => {
-      setProgressStep(prev => Math.min(prev + 1, 5));
+      setProgressStep(prev => {
+        const next = Math.min(prev + 1, 5);
+        if (next === 5 && streamInterval === null) {
+          streamInterval = setInterval(() => {
+            setStreamText(STREAM_MESSAGES[streamIdx % STREAM_MESSAGES.length]);
+            streamIdx++;
+          }, 800);
+        }
+        return next;
+      });
     }, 4000);
 
     try {
@@ -94,6 +118,8 @@ export default function Home() {
       setLastFailedTab(tab);
     } finally {
       clearInterval(interval);
+      if (streamInterval) clearInterval(streamInterval);
+      setStreamText('');
       setLoading(false);
     }
   }, [address]);
@@ -191,7 +217,7 @@ export default function Home() {
 
             {/* Loading — terminal only */}
             {loading && activeTab !== 'sources' && (
-              <ProgressSteps step={progressStep} />
+              <ProgressSteps step={progressStep} streamText={streamText} />
             )}
 
             {/* Error */}

@@ -11,7 +11,7 @@ const STEPS = [
   { label: 'analyze',  detail: 'Claude Sonnet 4 agent' },
 ];
 
-export default function ProgressSteps({ step }: { step: number }) {
+export default function ProgressSteps({ step, streamText }: { step: number; streamText?: string }) {
   const [blink, setBlink] = useState(true);
 
   useEffect(() => {
@@ -86,6 +86,28 @@ export default function ProgressSteps({ step }: { step: number }) {
             </div>
           );
         })}
+
+        {/* Streaming output line — shown when analyze step is active */}
+        {step === 5 && streamText && (
+          <div
+            style={{
+              marginTop: 8,
+              paddingTop: 8,
+              borderTop: '1px solid #1e1e1e',
+              fontFamily: "Consolas, 'Courier New', monospace",
+              fontSize: 13,
+              display: 'flex',
+              gap: 12,
+              alignItems: 'baseline',
+            }}
+          >
+            <span style={{ color: '#888', flexShrink: 0 }}>{'>'}</span>
+            <span style={{ color: '#4EC9B0' }}>
+              {streamText}
+              <span style={{ color: '#DCDCAA' }}>{blink ? '▌' : ' '}</span>
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
