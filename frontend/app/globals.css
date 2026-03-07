@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 body {
@@ -18,3 +18,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.styled-report p { color: #1e293b !important; font-size: 1rem !important; }
+.styled-report li { color: #1e293b !important; }
+.styled-report strong { font-weight: 700 !important; }

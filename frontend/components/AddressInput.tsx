@@ -18,26 +18,26 @@ interface Props {
 
 export default function AddressInput({ address, setAddress, loading, onSubmit, onDemoSelect }: Props) {
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full">
       <form onSubmit={onSubmit} className="flex gap-2 mb-3">
         <input
           type="text"
           value={address}
           onChange={e => setAddress(e.target.value)}
           placeholder="Enter any San Diego address..."
-          className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+          className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors text-sm"
         />
         <button
           type="submit"
           disabled={loading || !address.trim()}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm whitespace-nowrap"
+          className="bg-[#1e3a5f] hover:bg-[#162d4a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm whitespace-nowrap"
         >
           {loading ? 'Analyzing...' : 'Analyze'}
         </button>
       </form>
 
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-slate-600 text-xs">Try:</span>
+        <span className="text-gray-400 text-xs">Try:</span>
         {DEMO_ADDRESSES.map(d => (
           <button
             key={d.value}
@@ -47,7 +47,7 @@ export default function AddressInput({ address, setAddress, loading, onSubmit, o
               setAddress(d.value);
               onDemoSelect(d.value);
             }}
-            className="text-xs text-blue-400 hover:text-blue-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed px-2.5 py-1 rounded-full transition-colors"
           >
             {d.label}
           </button>

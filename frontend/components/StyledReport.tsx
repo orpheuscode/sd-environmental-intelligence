@@ -195,6 +195,7 @@ function makeComponents(light: boolean, explainButton?: (title: string) => React
 
     strong: ({ children }) => {
       const text = childText(children).trim();
+      // Status badge — exact match
       const badgeClass = badges[text];
       if (badgeClass) {
         return (
@@ -203,11 +204,15 @@ function makeComponents(light: boolean, explainButton?: (title: string) => React
           </span>
         );
       }
-      return <strong className={light ? 'text-slate-900 font-semibold' : 'text-white font-semibold'}>{children}</strong>;
+      // Numeric value with units — e.g. "AQI: 37", "Total coliform: >16,000 CFU/100mL"
+      if (light && /\d/.test(text) && text.length < 80) {
+        return <span className="text-2xl font-black text-gray-900 leading-none">{text}</span>;
+      }
+      return <strong className={light ? 'text-gray-900 font-semibold' : 'text-white font-semibold'}>{children}</strong>;
     },
 
     p: ({ children }) => (
-      <p className={`${light ? 'text-slate-700' : 'text-slate-300'} leading-relaxed mb-4 text-[15px]`}>{children}</p>
+      <p className={light ? 'text-gray-800 text-base leading-relaxed mb-3' : 'text-slate-300 leading-relaxed mb-4 text-[15px]'}>{children}</p>
     ),
 
     ul: ({ children }) => (
@@ -219,14 +224,14 @@ function makeComponents(light: boolean, explainButton?: (title: string) => React
     ),
 
     li: ({ children }) => (
-      <li className={`${light ? 'text-slate-800 bg-slate-50' : 'text-slate-300'} ${light ? 'rounded-lg p-3 flex gap-2 items-start' : 'leading-relaxed'} text-[15px]`}>
-        {light ? (
-          <>
-            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
-            <span>{children}</span>
-          </>
-        ) : children}
-      </li>
+      light ? (
+        <div className="flex gap-3 items-start py-2 border-b border-gray-100">
+          <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
+          <span className="text-gray-800 text-base leading-relaxed">{children}</span>
+        </div>
+      ) : (
+        <li className="text-slate-300 leading-relaxed text-[15px]">{children}</li>
+      )
     ),
 
     a: ({ href, children }) => (
@@ -274,7 +279,7 @@ interface Props {
 export default function StyledReport({ content, theme = 'dark', explainButton }: Props) {
   const light = theme === 'light';
   return (
-    <div className="styled-report">
+    <div className={`styled-report space-y-6 ${light ? 'text-gray-900' : 'text-slate-300'}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={makeComponents(light, explainButton)}

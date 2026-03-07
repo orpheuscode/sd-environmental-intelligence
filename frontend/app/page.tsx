@@ -48,6 +48,13 @@ const REPORT_TABS: { key: Exclude<Tab, 'sources'>; label: string; endpoint: stri
   { key: 'regulatory', label: 'Regulatory',        endpoint: '/api/regulatory' },
 ];
 
+const ALL_TABS: { key: Tab; label: string }[] = [
+  { key: 'resident',   label: 'Resident Report' },
+  { key: 'city',       label: 'City Operations' },
+  { key: 'regulatory', label: 'Regulatory' },
+  { key: 'sources',    label: 'Data Sources' },
+];
+
 const TAB_SKELETONS: Record<Exclude<Tab, 'sources'>, React.ReactNode> = {
   resident:   <ResidentReportSkeleton />,
   city:       <CityOpsViewSkeleton />,
@@ -123,185 +130,186 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white flex flex-col">
-      {/* Header */}
-      <header className="border-b border-slate-800 px-4 py-4">
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+
+      {/* ── Top nav ─────────────────────────────────────────────────────── */}
+      <header className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-md bg-blue-600 flex items-center justify-center text-xs font-bold">
+            <div className="w-8 h-8 rounded-md bg-[#1e3a5f] flex items-center justify-center text-xs font-bold text-white tracking-tight">
               SD
             </div>
             <div>
-              <h1 className="font-semibold text-sm leading-none">SD Environmental Intelligence</h1>
-              <p className="text-slate-400 text-xs mt-0.5">
+              <h1 className="font-semibold text-sm text-[#1e3a5f] leading-none">
+                SD Environmental Intelligence
+              </h1>
+              <p className="text-gray-400 text-xs mt-0.5">
                 Air · Water · Ocean · Contamination Risk
               </p>
             </div>
           </div>
-          <span className="text-slate-500 text-xs hidden sm:block">Claude Impact Lab 2026</span>
+          <span className="text-gray-300 text-xs hidden sm:block">Claude Impact Lab 2026</span>
         </div>
       </header>
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 space-y-6">
 
-        {/* 1. Address input */}
-        <AddressInput
-          address={address}
-          setAddress={setAddress}
-          loading={loading}
-          onSubmit={e => {
-            e.preventDefault();
-            if (activeTab !== 'sources') runTab(activeTab);
-          }}
-          onDemoSelect={addr => {
-            if (activeTab === 'sources') runTab('resident', addr);
-            else runTab(activeTab, addr);
-          }}
-        />
-
-        {/* 2. Tab bar */}
-        <div className="flex flex-wrap gap-2">
-          {REPORT_TABS.map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => handleTabClick(tab.key)}
-              disabled={loading}
-              className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                activeTab === tab.key
-                  ? 'bg-blue-600 border-blue-600 text-white'
-                  : 'border-slate-700 text-slate-300 hover:text-white hover:border-slate-500'
-              } disabled:opacity-40 disabled:cursor-not-allowed`}
-            >
-              {tab.label}
-              {results[tab.key] && !loading && (
-                <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 align-middle" />
-              )}
-            </button>
-          ))}
-
-          <button
-            onClick={() => handleTabClick('sources')}
-            disabled={loading}
-            className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-              activeTab === 'sources'
-                ? 'bg-slate-700 border-slate-600 text-white'
-                : 'border-slate-700 text-slate-300 hover:text-white hover:border-slate-500'
-            } disabled:opacity-40 disabled:cursor-not-allowed`}
-          >
-            Data Sources
-            {aggregatedRawData && (
-              <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-blue-400 align-middle" />
-            )}
-          </button>
+        {/* ── Address input card ──────────────────────────────────────────── */}
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <AddressInput
+            address={address}
+            setAddress={setAddress}
+            loading={loading}
+            onSubmit={e => {
+              e.preventDefault();
+              if (activeTab !== 'sources') runTab(activeTab);
+            }}
+            onDemoSelect={addr => {
+              if (activeTab === 'sources') runTab('resident', addr);
+              else runTab(activeTab, addr);
+            }}
+          />
         </div>
 
-        {/* 3. Loading — progress + skip anchor + skeleton */}
-        {loading && activeTab !== 'sources' && (
-          <div className="space-y-4">
-            <ProgressSteps step={progressStep} />
-            <div className="text-center">
-              <button
-                onClick={scrollToResults}
-                className="text-xs text-slate-500 hover:text-slate-300 border border-slate-700 hover:border-slate-600 px-4 py-1.5 rounded-full transition-colors"
-              >
-                Skip to results ↓
-              </button>
-            </div>
-            {TAB_SKELETONS[activeTab as Exclude<Tab, 'sources'>]}
-          </div>
-        )}
-
-        {/* 4. Report output anchor */}
-        <div id="report-output">
-
-          {/* Error */}
-          {error && !loading && (
-            <div className="bg-red-950/50 border border-red-900 rounded-xl px-5 py-4 space-y-3">
-              <div className="flex items-start gap-3">
-                <span className="text-red-400 text-lg leading-none flex-shrink-0">✕</span>
-                <div>
-                  <p className="text-red-300 text-sm font-medium">Analysis failed</p>
-                  <p className="text-red-400/70 text-xs mt-1 font-mono break-all">{error}</p>
-                </div>
-              </div>
-              {lastFailedTab && address.trim() && (
+        {/* ── Tab bar — underline style ───────────────────────────────────── */}
+        <div className="bg-white rounded-t-xl border border-gray-200 shadow-sm">
+          <div className="flex border-b border-gray-200 px-2">
+            {ALL_TABS.map(tab => {
+              const isActive = activeTab === tab.key;
+              const hasResult = tab.key !== 'sources' && !!results[tab.key as Exclude<Tab, 'sources'>];
+              return (
                 <button
-                  onClick={() => runTab(lastFailedTab)}
-                  className="text-xs border border-red-800 text-red-400 hover:text-red-200 hover:border-red-600 px-3 py-1.5 rounded-lg transition-colors"
+                  key={tab.key}
+                  onClick={() => handleTabClick(tab.key)}
+                  disabled={loading}
+                  className={`relative px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
+                    isActive
+                      ? 'text-[#1e3a5f] border-b-2 border-[#1e3a5f] -mb-px'
+                      : 'text-gray-500 hover:text-gray-800'
+                  }`}
                 >
-                  Retry
+                  {tab.label}
+                  {hasResult && !loading && (
+                    <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 align-middle" />
+                  )}
+                  {tab.key === 'sources' && aggregatedRawData && (
+                    <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-blue-400 align-middle" />
+                  )}
                 </button>
-              )}
-            </div>
-          )}
+              );
+            })}
+          </div>
 
-          {/* Data Sources tab */}
-          {!loading && activeTab === 'sources' && (
-            <DataSourcesTab rawData={aggregatedRawData} lastFetchedAt={lastFetchedAt} />
-          )}
+          {/* ── Tab content area ──────────────────────────────────────────── */}
+          <div className="p-5">
 
-          {/* Report results */}
-          {!loading && currentResult && activeTab !== 'sources' && (
-            <div className="space-y-6">
-              {activeTab === 'resident' && currentResult.reports.resident_report && (
-                <ResidentReport
-                  report={currentResult.reports.resident_report}
-                  risk={risk}
-                  address={currentResult.address}
-                  coordinates={currentResult.coordinates}
-                  rawData={currentResult.raw_data}
-                />
-              )}
-              {activeTab === 'city' && currentResult.reports.city_ops_report && (
-                <CityOpsView
-                  report={currentResult.reports.city_ops_report}
-                  risk={risk}
-                  address={currentResult.address}
-                  rawData={currentResult.raw_data}
-                />
-              )}
-              {activeTab === 'regulatory' && currentResult.reports.regulatory_report && (
-                <RegulatoryScorecard
-                  report={currentResult.reports.regulatory_report}
-                  rawData={currentResult.raw_data}
-                />
-              )}
-            </div>
-          )}
+            {/* Loading */}
+            {loading && activeTab !== 'sources' && (
+              <div className="space-y-4">
+                <ProgressSteps step={progressStep} />
+                <div className="text-center">
+                  <button
+                    onClick={scrollToResults}
+                    className="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 hover:border-gray-300 px-4 py-1.5 rounded-full transition-colors"
+                  >
+                    Skip to results ↓
+                  </button>
+                </div>
+                {TAB_SKELETONS[activeTab as Exclude<Tab, 'sources'>]}
+              </div>
+            )}
 
-          {/* Empty state */}
-          {!loading && !currentResult && !error && activeTab !== 'sources' && (
-            <div className="text-center py-20 space-y-4">
-              {/* Pre-analysis media feed */}
-              {activeTab === 'city' && (
-                <div className="text-left mb-8">
-                  <MediaFeed label="Live Local Environmental News" />
+            {/* Error */}
+            {error && !loading && (
+              <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <span className="text-red-500 text-lg leading-none flex-shrink-0">✕</span>
+                  <div>
+                    <p className="text-red-700 text-sm font-medium">Analysis failed</p>
+                    <p className="text-red-500 text-xs mt-1 font-mono break-all">{error}</p>
+                  </div>
+                </div>
+                {lastFailedTab && address.trim() && (
+                  <button
+                    onClick={() => runTab(lastFailedTab)}
+                    className="text-xs border border-red-300 text-red-600 hover:text-red-800 hover:border-red-400 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Retry
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Data Sources tab */}
+            {!loading && activeTab === 'sources' && (
+              <DataSourcesTab rawData={aggregatedRawData} lastFetchedAt={lastFetchedAt} />
+            )}
+
+            {/* Report results */}
+            <div id="report-output">
+              {!loading && currentResult && activeTab !== 'sources' && (
+                <div className="space-y-6">
+                  {activeTab === 'resident' && currentResult.reports.resident_report && (
+                    <ResidentReport
+                      report={currentResult.reports.resident_report}
+                      risk={risk}
+                      address={currentResult.address}
+                      coordinates={currentResult.coordinates}
+                      rawData={currentResult.raw_data}
+                    />
+                  )}
+                  {activeTab === 'city' && currentResult.reports.city_ops_report && (
+                    <CityOpsView
+                      report={currentResult.reports.city_ops_report}
+                      risk={risk}
+                      address={currentResult.address}
+                      rawData={currentResult.raw_data}
+                    />
+                  )}
+                  {activeTab === 'regulatory' && currentResult.reports.regulatory_report && (
+                    <RegulatoryScorecard
+                      report={currentResult.reports.regulatory_report}
+                      rawData={currentResult.raw_data}
+                    />
+                  )}
                 </div>
               )}
-              <p className="text-slate-500 text-sm">
-                Enter a San Diego address above to generate an environmental intelligence report.
-              </p>
-              <p className="text-slate-600 text-xs">
-                Reports take 15–30s — data from {activeTab === 'resident' ? '6' : '5'} live sources + Claude AI analysis.
-              </p>
+
+              {/* Empty state */}
+              {!loading && !currentResult && !error && activeTab !== 'sources' && (
+                <div className="text-center py-16 space-y-3">
+                  {activeTab === 'city' && (
+                    <div className="text-left mb-8">
+                      <MediaFeed label="Live Local Environmental News" />
+                    </div>
+                  )}
+                  <p className="text-gray-400 text-sm">
+                    Enter a San Diego address above to generate an environmental intelligence report.
+                  </p>
+                  <p className="text-gray-300 text-xs">
+                    Reports take 15–30s — data from {activeTab === 'resident' ? '6' : '5'} live sources + Claude AI analysis.
+                  </p>
+                </div>
+              )}
             </div>
-          )}
 
-        </div>{/* end #report-output */}
+          </div>
+        </div>
 
-        {/* 5. Data Architecture flow viz — always at bottom */}
+        {/* ── Data architecture flow viz ──────────────────────────────────── */}
         <DataFlowViz />
 
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 px-4 py-4">
-        <p className="text-slate-600 text-xs text-center max-w-4xl mx-auto">
+      {/* ── Footer ──────────────────────────────────────────────────────── */}
+      <footer className="border-t border-gray-200 bg-white px-4 py-4 mt-4">
+        <p className="text-gray-400 text-xs text-center max-w-4xl mx-auto">
           Data: EPA AirNow · Purple Air · City of San Diego Open Data ·
           NOAA NWS · Census Geocoder · SD County DEH ·{' '}
-          <span className="text-slate-500">Built by Quintin / Spire Labs</span>
+          <span className="text-gray-300">Built by Quintin / Spire Labs</span>
         </p>
       </footer>
+
     </div>
   );
 }
