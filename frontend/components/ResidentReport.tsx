@@ -149,10 +149,10 @@ export default function ResidentReport({ report, risk, address, coordinates, raw
   return (
     <div className="space-y-5">
       {/* Summary bar */}
-      <div className="flex flex-wrap items-start justify-between gap-4 bg-slate-800/40 border border-slate-700 rounded-xl p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4 bg-gray-50 border border-gray-200 rounded-xl p-5">
         <div>
-          <p className="text-slate-400 text-xs mb-1">{address}</p>
-          <p className="text-slate-500 text-xs">
+          <p className="text-gray-900 text-xs font-medium mb-1">{address}</p>
+          <p className="text-gray-600 text-xs">
             {coordinates.lat.toFixed(4)}, {coordinates.lng.toFixed(4)}
           </p>
         </div>
@@ -167,7 +167,7 @@ export default function ResidentReport({ report, risk, address, coordinates, raw
           {risk.contributing_factors.map((f, i) => (
             <span
               key={i}
-              className="text-xs bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-full text-slate-300"
+              className="text-xs bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-full text-gray-700"
             >
               {f}
             </span>

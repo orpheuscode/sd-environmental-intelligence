@@ -191,16 +191,16 @@ export default function DataFlowViz({ sourceStatus }: Props) {
   const totalSources = SOURCES.length;
 
   return (
-    <div className="border border-slate-800 rounded-xl bg-slate-900/40 overflow-hidden">
+    <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
       {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-          <span className="text-xs text-slate-400 font-medium">Data Architecture</span>
+          <span className="text-xs text-gray-500 font-medium">Data Architecture</span>
         </div>
         <button
           onClick={() => setExpanded(e => !e)}
-          className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
+          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
         >
           {expanded ? 'collapse' : 'expand'}
         </button>
@@ -208,11 +208,11 @@ export default function DataFlowViz({ sourceStatus }: Props) {
 
       {/* Collapsed summary */}
       {!expanded && (
-        <div className="px-4 py-2.5 text-xs text-slate-500">
+        <div className="px-4 py-2.5 text-xs text-gray-500">
           Synthesizing{' '}
-          <span className="text-slate-300 font-medium">{totalSources} city data sources</span>{' '}
+          <span className="text-gray-800 font-medium">{totalSources} city data sources</span>{' '}
           through{' '}
-          <span className="text-slate-300 font-medium">3 AI agents</span>{' '}
+          <span className="text-gray-800 font-medium">3 AI agents</span>{' '}
           → real-time environmental intelligence
         </div>
       )}
@@ -222,9 +222,9 @@ export default function DataFlowViz({ sourceStatus }: Props) {
         <div className="px-2 py-3">
           {/* Column labels */}
           <div className="grid grid-cols-3 text-center mb-1 px-1" style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
-            <span className="text-[10px] text-slate-600 uppercase tracking-widest font-medium">Data Sources</span>
-            <span className="text-[10px] text-slate-600 uppercase tracking-widest font-medium">Claude Agents</span>
-            <span className="text-[10px] text-slate-600 uppercase tracking-widest font-medium">Outputs</span>
+            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Data Sources</span>
+            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Claude Agents</span>
+            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Outputs</span>
           </div>
 
           <svg
@@ -233,8 +233,8 @@ export default function DataFlowViz({ sourceStatus }: Props) {
             style={{ maxHeight: '520px' }}
             onMouseLeave={() => setHover(null)}
           >
-            {/* SVG background so nodes are always visible */}
-            <rect x={0} y={0} width={VW} height={VH} fill="#0f172a" />
+            {/* SVG background */}
+            <rect x={0} y={0} width={VW} height={VH} fill="#ffffff" />
             <defs>
               <style>{`
                 .flow-path {
@@ -317,8 +317,8 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     width={SRC_W}
                     height={SRC_H}
                     rx={5}
-                    fill="#1e293b"
-                    stroke={lit ? color : '#334155'}
+                    fill="#ffffff"
+                    stroke={lit ? color : '#d1d5db'}
                     strokeWidth={lit ? 1.5 : 1}
                   />
                   {/* type color bar on left */}
@@ -335,7 +335,7 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     x={SRC_X + 12}
                     y={cy + 4}
                     fontSize="10.5"
-                    fill={lit ? '#e2e8f0' : '#94a3b8'}
+                    fill={lit ? '#1e293b' : '#6b7280'}
                     fontFamily="ui-monospace, monospace"
                   >
                     {src.label}
@@ -371,8 +371,8 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     width={AGT_W}
                     height={AGT_H}
                     rx={6}
-                    fill={lit ? agt.bg : '#1e293b'}
-                    stroke={lit ? agt.color : '#475569'}
+                    fill={lit ? '#eff6ff' : '#f8fafc'}
+                    stroke={lit ? agt.color : '#bfdbfe'}
                     strokeWidth={lit ? 2 : 1}
                     filter={lit ? 'url(#glow-blue)' : undefined}
                   />
@@ -382,7 +382,7 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     y={cy + 4}
                     fontSize="13"
                     fill={agt.color}
-                    opacity={lit ? 1 : 0.6}
+                    opacity={lit ? 1 : 0.5}
                   >
                     ◆
                   </text>
@@ -390,7 +390,7 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     x={AGT_X + 26}
                     y={cy + 4}
                     fontSize="10.5"
-                    fill={lit ? '#f1f5f9' : '#94a3b8'}
+                    fill={lit ? '#1e3a5f' : '#6b7280'}
                     fontFamily="ui-sans-serif, system-ui, sans-serif"
                     fontWeight={lit ? '600' : '400'}
                   >
@@ -419,15 +419,15 @@ export default function DataFlowViz({ sourceStatus }: Props) {
                     width={OUT_W}
                     height={OUT_H}
                     rx={5}
-                    fill="#1e293b"
-                    stroke={lit ? color : '#334155'}
+                    fill="#ffffff"
+                    stroke={lit ? color : '#d1d5db'}
                     strokeWidth={lit ? 1.5 : 1}
                   />
                   <text
                     x={OUT_X + 10}
                     y={cy + 4}
                     fontSize="10.5"
-                    fill={lit ? '#e2e8f0' : '#94a3b8'}
+                    fill={lit ? '#1e293b' : '#6b7280'}
                     fontFamily="ui-monospace, monospace"
                   >
                     {out.label}
@@ -462,7 +462,7 @@ export default function DataFlowViz({ sourceStatus }: Props) {
             ))}
           </svg>
 
-          <p className="text-center text-[10px] text-slate-700 mt-1">
+          <p className="text-center text-[10px] text-gray-400 mt-1">
             Hover any node to trace its data connections
           </p>
         </div>

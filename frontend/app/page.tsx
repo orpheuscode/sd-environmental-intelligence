@@ -9,11 +9,6 @@ import RegulatoryScorecard from '@/components/RegulatoryScorecard';
 import DataFlowViz from '@/components/DataFlowViz';
 import DataSourcesTab from '@/components/DataSourcesTab';
 import MediaFeed from '@/components/MediaFeed';
-import {
-  ResidentReportSkeleton,
-  CityOpsViewSkeleton,
-  RegulatoryScorecardSkeleton,
-} from '@/components/TabSkeleton';
 
 type Tab = 'resident' | 'city' | 'regulatory' | 'sources';
 
@@ -55,11 +50,6 @@ const ALL_TABS: { key: Tab; label: string }[] = [
   { key: 'sources',    label: 'Data Sources' },
 ];
 
-const TAB_SKELETONS: Record<Exclude<Tab, 'sources'>, React.ReactNode> = {
-  resident:   <ResidentReportSkeleton />,
-  city:       <CityOpsViewSkeleton />,
-  regulatory: <RegulatoryScorecardSkeleton />,
-};
 
 export default function Home() {
   const [address, setAddress] = useState('');
@@ -114,7 +104,7 @@ export default function Home() {
       return;
     }
     setActiveTab(tab);
-    if (address.trim() && !loading) runTab(tab);
+    if (address.trim() && !loading && !results[tab]) runTab(tab);
   };
 
   const currentResult = activeTab !== 'sources' ? results[activeTab] : undefined;
@@ -203,20 +193,9 @@ export default function Home() {
           {/* ── Tab content area ──────────────────────────────────────────── */}
           <div className="p-5">
 
-            {/* Loading */}
+            {/* Loading — terminal only */}
             {loading && activeTab !== 'sources' && (
-              <div className="space-y-4">
-                <ProgressSteps step={progressStep} />
-                <div className="text-center">
-                  <button
-                    onClick={scrollToResults}
-                    className="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 hover:border-gray-300 px-4 py-1.5 rounded-full transition-colors"
-                  >
-                    Skip to results ↓
-                  </button>
-                </div>
-                {TAB_SKELETONS[activeTab as Exclude<Tab, 'sources'>]}
-              </div>
+              <ProgressSteps step={progressStep} />
             )}
 
             {/* Error */}

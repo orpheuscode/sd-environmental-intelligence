@@ -99,11 +99,11 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
       {risk && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Score */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-5">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-3">Contamination Risk</p>
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <p className="text-gray-500 text-xs uppercase tracking-wider mb-3">Contamination Risk</p>
             <RiskBadge score={risk.risk_score} tier={risk.risk_tier} color={risk.risk_color} />
             {risk.timestamp && (
-              <p className="text-slate-600 text-xs mt-3">
+              <p className="text-gray-400 text-xs mt-3">
                 {new Date(risk.timestamp).toLocaleString()}
               </p>
             )}
@@ -116,13 +116,13 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
           </div>
 
           {/* Recommendations */}
-          <div className="bg-slate-800/40 border border-slate-700 rounded-xl p-5">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-3">Immediate Actions</p>
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <p className="text-gray-500 text-xs uppercase tracking-wider mb-3">Immediate Actions</p>
             <ol className="space-y-2">
               {risk.city_recommendations.map((r, i) => (
                 <li key={i} className="flex gap-2 text-sm">
-                  <span className="text-blue-400 font-bold flex-shrink-0">{i + 1}.</span>
-                  <span className="text-slate-200">{r}</span>
+                  <span className="text-blue-600 font-bold flex-shrink-0">{i + 1}.</span>
+                  <span className="text-gray-800">{r}</span>
                 </li>
               ))}
             </ol>
@@ -133,12 +133,12 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
       {/* Contributing factors */}
       {risk && risk.contributing_factors.length > 0 && (
         <div>
-          <p className="text-slate-500 text-xs uppercase tracking-wider mb-2">Risk Factors</p>
+          <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Risk Factors</p>
           <div className="flex flex-wrap gap-2">
             {risk.contributing_factors.map((f, i) => (
               <span
                 key={i}
-                className="text-xs bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-full text-slate-300"
+                className="text-xs bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-full text-gray-700"
               >
                 {f}
               </span>
@@ -164,7 +164,7 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
           href="https://www.sandiego.gov/mayor/news"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+          className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
         >
           SD Mayor Press Releases ↗
         </a>
@@ -172,7 +172,7 @@ export default function CityOpsView({ report, risk, address, rawData }: Props) {
           href="https://www.sandiego.gov/city-clerk/officialdocs"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+          className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
         >
           SD City Official Documents ↗
         </a>

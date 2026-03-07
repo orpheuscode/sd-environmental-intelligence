@@ -1,31 +1,48 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 const STEPS = [
-  { label: 'geocode →', detail: 'Census Geocoder API' },
-  { label: 'fetch →',   detail: 'EPA AirNow + Purple Air sensors' },
-  { label: 'fetch →',   detail: 'SD Socrata drinking water CSV' },
-  { label: 'fetch →',   detail: 'ocean bacteria + NOAA precip grid' },
-  { label: 'compute →', detail: 'contamination risk score' },
-  { label: 'analyze →', detail: 'Claude Sonnet 4 agent' },
+  { label: 'geocode',  detail: 'Census Geocoder API' },
+  { label: 'fetch',    detail: 'EPA AirNow + Purple Air sensors' },
+  { label: 'fetch',    detail: 'SD Socrata drinking water' },
+  { label: 'fetch',    detail: 'ocean bacteria + NOAA precip grid' },
+  { label: 'compute',  detail: 'contamination risk score' },
+  { label: 'analyze',  detail: 'Claude Sonnet 4 agent' },
 ];
 
 export default function ProgressSteps({ step }: { step: number }) {
+  const [blink, setBlink] = useState(true);
+
+  useEffect(() => {
+    const t = setInterval(() => setBlink(b => !b), 530);
+    return () => clearInterval(t);
+  }, []);
+
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden min-h-48">
-      {/* Terminal header */}
-      <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 border-b border-slate-700">
-        <span className="w-3 h-3 rounded-full bg-red-500/70" />
-        <span className="w-3 h-3 rounded-full bg-amber-500/70" />
-        <span className="w-3 h-3 rounded-full bg-green-500/70" />
-        <span className="text-slate-400 text-sm ml-2 font-mono">sd-env-intelligence</span>
-        <span className="ml-auto flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-          <span className="text-blue-300 text-sm font-mono font-medium">running</span>
+    <div style={{ border: '1px solid #333333', borderRadius: 12 }}>
+      {/* Title bar */}
+      <div
+        style={{
+          background: '#1C1C1C',
+          borderBottom: '1px solid #333333',
+          borderRadius: '12px 12px 0 0',
+          padding: '6px 12px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+        }}
+      >
+        <span style={{ fontFamily: "Consolas, 'Courier New', monospace", fontSize: 13, color: '#ffffff' }}>
+          sd-env-intelligence
+        </span>
+        <span style={{ marginLeft: 'auto', fontFamily: "Consolas, 'Courier New', monospace", fontSize: 12, color: '#888' }}>
+          {blink ? '_' : ' '}
         </span>
       </div>
 
       {/* Log lines */}
-      <div className="px-5 py-4 font-mono space-y-0.5">
+      <div style={{ background: '#0C0C0C', padding: '16px 20px', minHeight: 200 }}>
         {STEPS.map((s, i) => {
           const done    = i < step;
           const active  = i === step;
@@ -33,29 +50,38 @@ export default function ProgressSteps({ step }: { step: number }) {
           return (
             <div
               key={i}
-              className={`flex items-center gap-3 py-2 transition-opacity duration-300 ${pending ? 'opacity-20' : 'opacity-100'}`}
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: 12,
+                padding: '5px 0',
+                opacity: pending ? 0.2 : 1,
+                fontFamily: "Consolas, 'Courier New', monospace",
+                fontSize: 13,
+              }}
             >
-              {/* status glyph */}
-              <span className="w-4 flex-shrink-0 text-center">
-                {done    && <span className="text-emerald-400 text-base">✓</span>}
-                {active  && <span className="text-blue-300 text-base animate-pulse">›</span>}
-                {pending && <span className="text-slate-600 text-base">·</span>}
-              </span>
+              {/* prompt */}
+              <span style={{ color: '#888', flexShrink: 0 }}>{'>'}</span>
 
-              {/* label — fixed width column */}
-              <span className={`flex-shrink-0 min-w-[110px] text-sm font-semibold ${done ? 'text-slate-500' : active ? 'text-blue-200' : 'text-slate-600'}`}>
+              {/* verb */}
+              <span style={{
+                flexShrink: 0,
+                minWidth: 72,
+                color: done ? '#6A9955' : active ? '#DCDCAA' : '#555',
+                fontWeight: 600,
+              }}>
                 {s.label}
               </span>
 
               {/* detail */}
-              <span className={`text-sm leading-relaxed ${done ? 'text-slate-500' : active ? 'text-slate-200' : 'text-slate-600'}`}>
+              <span style={{ color: done ? '#6A9955' : active ? '#D4D4D4' : '#444' }}>
                 {s.detail}
               </span>
 
-              {/* right side */}
-              <span className="ml-auto flex-shrink-0">
-                {done   && <span className="text-green-400 text-sm font-mono">ok</span>}
-                {active && <span className="text-blue-400 text-sm animate-pulse">▌</span>}
+              {/* status */}
+              <span style={{ marginLeft: 'auto', flexShrink: 0 }}>
+                {done   && <span style={{ color: '#4EC9B0' }}>ok</span>}
+                {active && <span style={{ color: '#DCDCAA' }}>{blink ? '▌' : ' '}</span>}
               </span>
             </div>
           );
