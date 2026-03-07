@@ -15,7 +15,7 @@ interface SourceDef {
   /** Landing page / info page shown as card title link */
   portalUrl: string;
   /** Direct database or search URL for the "View Database →" button */
-  dbUrl: string;
+  dbUrl?: string;
   updateFrequency: string;
   /** dot-path into rawData to find this source's data, e.g. "drinking_water.bacteria" */
   rawDataPath?: string;
@@ -34,6 +34,7 @@ const CATALOG: SourceDef[] = [
     description: 'Official AQI, PM2.5, and ozone readings from EPA monitoring stations near the queried address.',
     feeds: ['resident', 'city'],
     portalUrl: 'https://www.airnow.gov',
+    dbUrl: 'https://www.airnow.gov',
     updateFrequency: 'Hourly',
     rawDataPath: 'air_quality.airnow_official',
     dateField: 'date_observed',
@@ -44,7 +45,8 @@ const CATALOG: SourceDef[] = [
     category: 'Air Quality',
     description: 'Hyperlocal community air quality sensors providing PM2.5 and AQI within 0.15° of the address.',
     feeds: ['resident', 'city'],
-    portalUrl: 'https://www2.purpleair.com/pages/map',
+    portalUrl: 'https://www.purpleair.com/map',
+    dbUrl: 'https://www.purpleair.com/map',
     updateFrequency: 'Real-time (~2min)',
     rawDataPath: 'air_quality.purple_air_hyperlocal',
   },
@@ -57,6 +59,7 @@ const CATALOG: SourceDef[] = [
     description: 'Fluoride, color, and turbidity levels measured across the SD water distribution system.',
     feeds: ['resident', 'city', 'regulatory'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Monthly',
     rawDataPath: 'drinking_water.chemical_parameters',
     dateField: 'date_sample',
@@ -68,6 +71,7 @@ const CATALOG: SourceDef[] = [
     description: 'Total coliform, E. coli, and MCL compliance data from indicator bacteria monitoring.',
     feeds: ['resident', 'city', 'regulatory'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Weekly (latest readings)',
     rawDataPath: 'drinking_water.bacteria',
     dateField: 'date_sampled',
@@ -79,6 +83,7 @@ const CATALOG: SourceDef[] = [
     description: 'Lead, hardness, alkalinity, and fluoride in treatment plant effluent before distribution.',
     feeds: ['resident', 'regulatory'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Monthly',
     rawDataPath: 'drinking_water.plant_effluent',
     dateField: 'date_sample',
@@ -90,6 +95,7 @@ const CATALOG: SourceDef[] = [
     description: 'Geographic locations of all water quality monitoring sites; used to geo-match data to address.',
     feeds: ['resident', 'city'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Static (infrastructure)',
     rawDataPath: 'drinking_water.sample_sites',
   },
@@ -102,6 +108,7 @@ const CATALOG: SourceDef[] = [
     description: 'Fecal coliform and enterococcus bacteria levels at SD coastal monitoring stations (2020–present).',
     feeds: ['resident', 'city'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Weekly',
     rawDataPath: 'ocean_water.ocean_bacteria',
     dateField: 'date_sample',
@@ -113,6 +120,7 @@ const CATALOG: SourceDef[] = [
     description: 'Continuous ocean water quality readings from PLOO and SBOO outfall stations: BOD, chlorophyll, turbidity.',
     feeds: ['resident', 'city'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Continuous (15-min intervals)',
     rawDataPath: 'ocean_water.rtoms_water_quality',
     dateField: 'datetime_pst',
@@ -124,6 +132,7 @@ const CATALOG: SourceDef[] = [
     description: 'Dissolved oxygen, pH, nitrate, and CO₂ from RTOMS ocean chemistry sensors at PLOO and SBOO.',
     feeds: ['resident', 'city'],
     portalUrl: 'https://data.sandiego.gov/datasets/',
+    dbUrl: 'https://seshat.datasd.org/water_monitoring/',
     updateFrequency: 'Continuous (15-min intervals)',
     rawDataPath: 'ocean_water.rtoms_ocean_chemistry',
     dateField: 'datetime_pst',
@@ -134,7 +143,8 @@ const CATALOG: SourceDef[] = [
     category: 'Ocean & Beach',
     description: 'Active and historical beach closure and advisory records from SD County Environmental Health.',
     feeds: ['resident', 'city'],
-    portalUrl: 'https://www.sandiegocounty.gov/content/sdc/deh/water/beach.html',
+    portalUrl: 'https://www.sandiegocounty.gov/deh/water/beaches/',
+    dbUrl: 'https://www.sandiegocounty.gov/deh/water/beaches/',
     updateFrequency: 'As-needed (event driven)',
     rawDataPath: 'ocean_water.beach_closures',
   },
@@ -146,7 +156,8 @@ const CATALOG: SourceDef[] = [
     category: 'Environmental Flow',
     description: '7-day precipitation forecast and recent rainfall totals from the San Diego NWS forecast office.',
     feeds: ['resident', 'city'],
-    portalUrl: 'https://www.weather.gov/sgx/',
+    portalUrl: 'https://forecast.weather.gov',
+    dbUrl: 'https://forecast.weather.gov',
     updateFrequency: 'Hourly (forecast)',
     rawDataPath: 'precipitation',
   },
@@ -157,6 +168,7 @@ const CATALOG: SourceDef[] = [
     description: 'International Boundary & Water Commission data for TJ River flow and sewage contamination events.',
     feeds: ['resident', 'city', 'regulatory'],
     portalUrl: 'https://www.ibwc.gov/water-data/',
+    dbUrl: 'https://www.ibwc.gov/water-data/',
     updateFrequency: 'Daily',
     rawDataPath: 'ocean_water.ibwc_tijuana_river',
   },
@@ -167,6 +179,7 @@ const CATALOG: SourceDef[] = [
     description: 'Converts any US address to lat/lng coordinates used to geo-match all data sources. No API key required.',
     feeds: ['resident', 'city', 'regulatory'],
     portalUrl: 'https://geocoding.geo.census.gov',
+    dbUrl: 'https://geocoding.geo.census.gov',
     updateFrequency: 'Static (address database)',
   },
 
@@ -177,7 +190,8 @@ const CATALOG: SourceDef[] = [
     category: 'Health Outcomes',
     description: 'Census-tract level health outcome data: asthma prevalence, COPD, heart disease, by San Diego zip code.',
     feeds: ['resident', 'regulatory'],
-    portalUrl: 'https://www.cdc.gov/places/',
+    portalUrl: 'https://places.cdc.gov',
+    dbUrl: 'https://places.cdc.gov',
     updateFrequency: 'Annual',
   },
 
@@ -189,18 +203,30 @@ const CATALOG: SourceDef[] = [
     description: 'San Diego municipal environmental ordinances; scraped to identify active regulations and stated targets.',
     feeds: ['regulatory'],
     portalUrl: 'https://www.sandiego.gov/city-clerk/officialdocs/municipal-code',
+    dbUrl: 'https://www.sandiego.gov/city-clerk/officialdocs/municipal-code',
     updateFrequency: 'As amended',
     rawDataPath: 'regulatory',
   },
   {
     id: 'council_res',
-    name: 'SD Council Resolutions (Granicus)',
+    name: 'SD Council Resolutions',
     category: 'Regulatory & Government',
     description: 'City council resolution archive with environmental commitments tracked against monitoring outcomes.',
     feeds: ['regulatory'],
-    portalUrl: 'https://sandiego.granicus.com',
+    portalUrl: 'https://www.sandiego.gov/city-clerk/city-council-docket-agenda',
+    dbUrl: 'https://www.sandiego.gov/city-clerk/city-council-docket-agenda',
     updateFrequency: 'Per council session',
     rawDataPath: 'regulatory',
+  },
+  {
+    id: 'nextrequest',
+    name: 'NextRequest FOIA — SD',
+    category: 'Regulatory & Government',
+    description: '40,000+ public records requests filed with the City of San Diego; search for TJ River, water quality, and air purifier records.',
+    feeds: ['regulatory'],
+    portalUrl: 'https://sandiego.nextrequest.com',
+    dbUrl: 'https://sandiego.nextrequest.com',
+    updateFrequency: 'Continuous (as filed)',
   },
 ];
 
@@ -406,6 +432,18 @@ function SourceCard({ src, rawData }: CardProps) {
             </div>
           )}
         </div>
+      )}
+
+      {/* View Database button */}
+      {src.dbUrl && (
+        <a
+          href={src.dbUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 px-2.5 py-1 rounded transition-colors"
+        >
+          View Database →
+        </a>
       )}
 
       {/* Not yet fetched */}
