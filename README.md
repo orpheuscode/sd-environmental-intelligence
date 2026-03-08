@@ -50,6 +50,11 @@ Switch to **Regulatory tab** — watch the resolutions passed in 2021-2023 get c
 
 ---
 
+## Demo Video
+[60-second walkthrough — Imperial Beach CRITICAL RISK live demo](https://youtu.be/nHjXmAty3No)
+
+---
+
 ## Architecture
 
 ```
