@@ -145,7 +145,7 @@ Built solo at the Claude Impact Lab Hackathon, San Diego, March 7 2026.
 
 | Criterion | What We Built |
 |-----------|--------------|
-| **Civic Impact (5pts)** | Three distinct user populations served: residents, city ops, legislators. Addresses an active public health crisis affecting hundreds of thousands of San Diegans. |
-| **Use of City Data (5pts)** | 11 live data sources, 7 SD-specific datasets, real-time synthesis — not static analysis. |
-| **Technical Execution (5pts)** | Full MCP server, three specialized Claude agents, streaming progress, persistent tab state, production build. |
-| **Presentation & Story (5pts)** | Two-address contrast demo. Pacific Beach vs Imperial Beach. The gap is the story. |
+| **Civic Impact ** | Three distinct user populations served: residents, city ops, legislators. Addresses an active public health crisis affecting hundreds of thousands of San Diegans. |
+| **Use of City Data ** | 11 live data sources, 7 SD-specific datasets, real-time synthesis — not static analysis. |
+| **Technical Execution ** | Full MCP server, three specialized Claude agents, streaming progress, persistent tab state, production build. |
+| **Presentation & Story ** | Two-address contrast demo. Pacific Beach vs Imperial Beach. The gap is the story. |
