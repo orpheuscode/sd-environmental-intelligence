@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a63c6ca4-021f-4790-9dab-e045a3d76258" width="49%" />
+  <img src="https://github.com/user-attachments/assets/2fb246a5-12cc-4e73-ac5d-093d9fd44d12" width="49%" />
+</p>
 # SD Environmental Intelligence
 
 **The intelligence layer San Diego's coastline has always needed — owned by residents, built for officials.**
